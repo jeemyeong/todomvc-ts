@@ -9,3 +9,4 @@ ReactDOM.render(
   document.getElementById('root') as HTMLElement
 );
 registerServiceWorker();
+(window as any).env = process.env;
