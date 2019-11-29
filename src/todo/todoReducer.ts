@@ -201,42 +201,56 @@ const toggleAllAction = TodoActionCreator.toggleAll();
 const clearCompleteAction = TodoActionCreator.clearCompleted();
 const removeTodoAction = TodoActionCreator.removeTodo(0);
 
-console.log(todoList.list);
-console.log("\n-\n");
+type Middleware = (todoAction: TodoAction) => Promise<void>
 
-todoList.apply(addTodo1Action);
-console.log(todoList.list);
-console.log("\n-\n");
+const createDispatch = (middleware: Middleware) => async (todoAction: TodoAction) => {
+  await middleware(todoAction);
+  todoList.apply(todoAction);
+};
 
-todoList.apply(addTodo2Action);
-console.log(todoList.list);
-console.log("\n-\n");
+const dispatch = createDispatch(async (action) => {
+  console.log(action);
+});
 
-todoList.apply(addTodo3Action);
-console.log(todoList.list);
-console.log("\n-\n");
+const main = async () => {
+  console.log(todoList.list);
+  console.log("\n-\n");
 
-todoList.apply(checkTodoAction);
-console.log(todoList.list);
-console.log("\n-\n");
+  await dispatch(addTodo1Action);
+  console.log(todoList.list);
+  console.log("\n-\n");
 
-todoList.apply(uncheckTodoAction);
-console.log(todoList.list);
-console.log("\n-\n");
+  await dispatch(addTodo2Action);
+  console.log(todoList.list);
+  console.log("\n-\n");
 
-todoList.apply(updateTodoAction);
-console.log(todoList.list);
-console.log("\n-\n");
+  await dispatch(addTodo3Action);
+  console.log(todoList.list);
+  console.log("\n-\n");
 
-todoList.apply(toggleAllAction);
-console.log(todoList.list);
-console.log("\n-\n");
+  await dispatch(checkTodoAction);
+  console.log(todoList.list);
+  console.log("\n-\n");
 
-todoList.apply(clearCompleteAction);
-console.log(todoList.list);
-console.log("\n-\n");
+  await dispatch(uncheckTodoAction);
+  console.log(todoList.list);
+  console.log("\n-\n");
 
-todoList.apply(removeTodoAction);
-console.log(todoList.list);
-console.log("\n-\n");
+  await dispatch(updateTodoAction);
+  console.log(todoList.list);
+  console.log("\n-\n");
 
+  await dispatch(toggleAllAction);
+  console.log(todoList.list);
+  console.log("\n-\n");
+
+  await dispatch(clearCompleteAction);
+  console.log(todoList.list);
+  console.log("\n-\n");
+
+  await dispatch(removeTodoAction);
+  console.log(todoList.list);
+  console.log("\n-\n");
+};
+
+main()
